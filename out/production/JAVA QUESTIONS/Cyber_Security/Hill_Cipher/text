@@ -1,0 +1,110 @@
+package Cyber_Security.Hill_Cipher;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Hill_Cipher
+{
+    static void generate_key(String key,int key_matrix[][])
+    {
+        int x=0;
+        for(int i=0;i<key_matrix.length;i++)
+        {
+            for(int j=0;j<key_matrix[0].length;j++)
+            {
+                //Mod 65 because ASCII of A = 65
+                key_matrix[i][j]=(key.charAt(x))%65;
+                x++;
+            }
+        }
+    }
+
+    static void generate_msg_matrix(String msg,int msg_matrix[][])
+    {
+        int x=0;
+        for(int i=0;i<msg_matrix.length;i++)
+        {
+                //Mod 65 because ASCII of A = 65
+                msg_matrix[i][0]=(msg.charAt(x))%65;
+                x++;
+
+        }
+    }
+
+    static void valid_matrix(int key_matrix[][])
+    {
+        int det = key_matrix[0][0] * key_matrix[1][1] - key_matrix[0][1] * key_matrix[1][0];
+
+        if(det==0)
+        {
+            System.out.println();
+        }
+    }
+
+    static void encrypt(int msg_matrix[][],int key_matrix[][],int cipher_matrix[][])
+    {
+        for(int i=0;i<msg_matrix.length;i++)
+        {
+            for(int j=0;j<1;j++)
+            {
+                cipher_matrix[i][j]=0;
+
+                for(int x=0;x<msg_matrix.length;x++)
+                {
+                    cipher_matrix[i][j]=cipher_matrix[i][j]+(key_matrix[i][x]*msg_matrix[x][j]);
+                }
+
+                cipher_matrix[i][j]=cipher_matrix[i][j]%26;
+            }
+        }
+    }
+
+    public static void main(String args[])
+    {
+        Scanner sc=new Scanner(System.in);
+
+        System.out.print("Enter the text you wish to encrypt = ");
+        //Message to be encrypted
+        String msg=sc.nextLine();
+
+        //Assunming adding Z
+        if(msg.length()%2==1)
+        {
+            msg=msg+"Z";
+        }
+
+        System.out.print("Enter the key = ");
+        //Key
+        String key=sc.next();
+
+        double sq=Math.sqrt(key.length());
+        if(sq!=(int)sq)
+        {
+            System.out.println("Cannot form a matrix");
+            System.exit(0);
+        }
+        int l=(int)sq;
+
+        int key_matrix[][]= new int[l][l];
+        generate_key(key,key_matrix);
+        valid_matrix(key_matrix);
+
+        int msg_matrix[][]=new int [msg.length()][1];
+        generate_msg_matrix(msg,msg_matrix);
+
+        int cipher_matrix[][]=new int [msg.length()][1];
+        encrypt(msg_matrix,key_matrix,cipher_matrix);
+
+        String cipher_text="";
+        for(int i=0;i<msg_matrix.length;i++)
+        {
+            cipher_text=cipher_text+(char)(cipher_matrix[i][0]+65);
+        }
+
+        System.out.println("Cipher Text = "+cipher_text);
+
+        //=============================================================
+
+
+    }
+}
