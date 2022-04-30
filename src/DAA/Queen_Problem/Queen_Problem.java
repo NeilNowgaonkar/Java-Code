@@ -36,7 +36,7 @@ public class Queen_Problem
         {
             count++;
 
-            System.out.println("\nSolution - "+count);
+            System.out.println("\nSolution :- "+count);
             display(board);
         }
 
